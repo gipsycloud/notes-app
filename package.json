@@ -1,8 +1,9 @@
 {
   "name": "node_new_project",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
+    "start": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,7 +22,9 @@
     "express-session": "^1.18.1",
     "method-override": "^3.0.0",
     "mongoose": "^8.9.5",
+    "morgan": "^1.10.0",
     "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "passport-google-oauth20": "^2.0.0",
+    "progress": "^2.0.3"
   }
 }
