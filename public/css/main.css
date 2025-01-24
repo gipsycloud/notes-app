@@ -4,8 +4,8 @@
 }
 
 body {
-  background-color: var(--background-color);
   font-family: 'Poppins', sans-serif;
+  background-color: var(--background-color);
   color: var(--bs-primary-rgb);
   font-weight: 300;
   font-size: 1.2rem;
@@ -26,6 +26,7 @@ h6 {
   max-width: 1600px;
 }
 
+/* Button */
 .btn {
   padding-left: 1.6rem;
   padding-right: 1.6rem;
@@ -72,13 +73,16 @@ h6 {
   --bs-pagination-active-border-color: var(--bs-primary-rgb);
 }
 
-/* home */
+
+/* Home */
 @media (min-width: 1200px) {
   .home {
-    background: url('../img/human-1.svg') left bottom no-repeat,
+    background:
+      url('../img/human-1.svg') left bottom no-repeat,
       url('../img/human-2.svg') right bottom no-repeat,
-      url('../img/noise-bg.png') left top no-repeat,
-      var(--background-color)
+      url('../img/noise-bg.svg') left top repeat,
+      var(--background-color);
+    ;
   }
 }
 

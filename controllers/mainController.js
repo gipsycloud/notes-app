@@ -6,7 +6,7 @@ exports.homepage = async (req, res) => {
   }
   res.render('index', {
     locals,
-    layouts: '../views/layouts/front-page'
+    layout: '../views/layouts/front-page'
   });
 }
 

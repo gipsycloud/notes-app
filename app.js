@@ -20,7 +20,13 @@ app.set('view engine', 'ejs');
 
 //route
 app.use('/', require('./routes/index'));
+app.use('/', require('./routes/dashboard'));
 
+app.get('*', (req, res) => {
+  res.status(404).render('404');
+});
+
+// progress bar setup
 var ProgressBar = require('./config/progressbar');
 
 app.listen(port, () => {
