@@ -4,7 +4,10 @@ exports.homepage = async (req, res) => {
     title: "Nodejs",
     dscription: "Node application"
   }
-  res.render('index', locals);
+  res.render('index', {
+    locals,
+    layouts: '../views/layouts/front-page'
+  });
 }
 
 // get || about page
