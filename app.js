@@ -2,9 +2,29 @@ require('dotenv').config();
 
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
+const session = require('express-session');
+const passport = require('passport');
+const MongoStore = require('connect-mongo');
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    collection: 'sessions'
+  })
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+// connect to db
+const connectDB = require('./server/db');
+connectDB();
 
 // middle
 app.use(express.urlencoded({ extended: true }));
@@ -20,6 +40,7 @@ app.set('view engine', 'ejs');
 
 //route
 app.use('/', require('./routes/index'));
+app.use('/', require('./routes/auth'));
 app.use('/', require('./routes/dashboard'));
 
 app.get('*', (req, res) => {
