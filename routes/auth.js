@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
+const User = require('../model/User');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(new GoogleStrategy({
@@ -9,13 +10,14 @@ passport.use(new GoogleStrategy({
   callbackURL: process.env.GOOGLE_CALLBACK_URL
 },
   async function (accessToken, refreshToken, profile, done) {
-    // User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    //   return cb(err, user);
-    // });
     const newUser = {
       googleId: profile.id,
+      displayName: profile.displayName,
+      firstName: profile.name.givenName,
+      lastName: profile.name.familyName,
       userName: profile.name.givenName,
       profileImage: profile._json.picture,
+      // profileImage: profile.photos[0].value
     };
     console.log(newUser);
     console.log(profile);
@@ -25,12 +27,9 @@ passport.use(new GoogleStrategy({
         user = await User.create(newUser);
         done(null, user);
         console.log('New user created');
-        req.flash('success_msg', 'You are now logged in');
 
       } else {
         done(null, user);
-        // user.userName = profile.name.givenName;
-        // user.profileImage = profile._json.picture;
         await user.save();
       }
     } catch (err) {
@@ -39,9 +38,8 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-// google logi route
-
-router.get('/google',
+// google login route
+router.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] }));
 
 router.get('/google/callback',
@@ -56,16 +54,40 @@ router.get('/login-failure', (req, res) => {
   res.send('Failed to login');
 });
 
+router.get('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      console.log(err);
+      res.send('Error');
+    } else {
+      req.logout();
+      res.redirect('/');
+    }
+  });
+});
+
 // persist user data after successful authentication
 passport.serializeUser(function (user, done) {
   done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-  User.findById(id, function (err, user) {
-    done(err, user);
-  });
-  console.log('deserializeUser', id);
+// original
+// passport.deserializeUser(function (id, done) {
+//   User.findById(id, function (err, user) {
+//     done(err, user);
+//   });
+//   console.log('deserializeUser', id);
+// });
+
+// new code for callback error
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await User.findById(id);
+    done(null, user);
+  } catch (error) {
+    console.log(error);
+
+  }
 });
 
 module.exports = router;
