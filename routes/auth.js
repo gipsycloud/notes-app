@@ -60,7 +60,6 @@ router.get('/logout', (req, res) => {
       console.log(err);
       res.send('Error');
     } else {
-      req.logout();
       res.redirect('/');
     }
   });
