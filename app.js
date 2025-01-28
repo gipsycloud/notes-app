@@ -16,7 +16,10 @@ app.use(session({
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
     collection: 'sessions'
-  })
+  }),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
 }));
 
 app.use(passport.initialize());
