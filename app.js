@@ -5,6 +5,7 @@ const expressLayouts = require('express-ejs-layouts');
 const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
+const methodOverride = require('method-override');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ connectDB();
 // middle
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(methodOverride("_method"));
 
 //  static files;
 app.use(express.static('public'));
