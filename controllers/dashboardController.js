@@ -79,7 +79,7 @@ exports.dashboard = async (req, res) => {
 exports.item = async (req, res) => {
   const locals = {
     title: "Dashboard",
-    dscription: "Node application"
+    dscription: "Note application"
   };
   const note = await Note.findById({ _id: req.params.id }).where({ _id: req.params.id }).lean();
   if (note) {
@@ -94,6 +94,34 @@ exports.item = async (req, res) => {
   }
 }
 
+// add
+exports.addItem = async (req, res) => {
+  const locals = {
+    title: "Dashboard",
+    dscription: "Node application"
+  }
+  res.render('dashboard/add_note', {
+    layout: "../views/layouts/dashboard",
+    locals,
+  });
+}
+
+exports.submitItem = async (req, res) => {
+  try {
+    // req.body.user = req.user.id;
+    // await Note.create(req.body);
+    const note = new Note({
+      user: req.user.id,
+      title: req.body.title,
+      content: req.body.content,
+    });
+    await note.save();
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.updateItem = async (req, res) => {
   try {
     await Note.findByIdAndUpdate({ _id: req.params.id }, req.body).where({
@@ -102,6 +130,17 @@ exports.updateItem = async (req, res) => {
     res.redirect(`/dashboard/item/${req.params.id}`);
 
     // { title: req.body.title, content: req.body.content }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+exports.deleteItem = async (req, res) => {
+  try {
+    await Note.findByIdAndDelete({ _id: req.params.id }).where({
+      user: req.user.id
+    });
+    res.redirect('/dashboard');
   } catch (error) {
     console.log(error);
   }
