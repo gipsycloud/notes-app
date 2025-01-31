@@ -145,3 +145,40 @@ exports.deleteItem = async (req, res) => {
     console.log(error);
   }
 };
+
+// search || get
+exports.search = async (req, res) => {
+  try {
+    res.render('/dashboard/search', {
+      layout: "../views/layouts/dashboard",
+      search: req.query.search
+    });
+  } catch (error) {
+    console.log(error);
+
+  }
+};
+
+// search || post
+exports.searchSubmit = async (req, res) => {
+  try {
+    let searchTerm = req.body.searchTerm;
+    const searchSpecialChars = searchTerm.replace(/[^a-zA-Z0-9]/g, '');
+    const searchResults = await Note.find({
+      $or: [
+        // { $search: searchSpecialChars },
+        // { $caseSensitive: false },
+        { title: { $regex: new RegExp(searchSpecialChars, 'i') } },
+        { content: { $regex: new RegExp(searchSpecialChars, 'i') } },
+      ]
+    }).where({ user: req.user.id }).lean();
+    res.render('dashboard/search', {
+      layout: "../views/layouts/dashboard",
+      search: searchResults,
+      searchTerm
+    });
+  } catch (error) {
+    console.log(error);
+
+  }
+};
