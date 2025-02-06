@@ -46,33 +46,6 @@ exports.dashboard = async (req, res) => {
       current: page,
       pages: Math.ceil(count / perPage)
     });
-
-    // Mongoose "^7.0.0 Update
-    // const notes = await Note.aggregate([
-    //   { $sort: { createdAt: -1 } },
-    //   { $match: { user: req.user._id } },
-    //   {
-    //     $project: {
-    //       title: { $substr: ["$title", 0, 30] },
-    //       content: { $substr: ["$content", 0, 100] },
-    //     },
-    //   }
-    // ])
-    //   .skip(perPage * page - perPage)
-    //   .limit(perPage)
-    //   .exec();
-
-    // const count = await Note.countDocuments();
-
-    // res.render('dashboard/index', {
-    //   userName: req.user.displayName,
-    //   locals,
-    //   notes,
-    //   layout: "../views/layouts/dashboard",
-    //   current: page,
-    //   pages: Math.ceil(count / perPage)
-    // });
-
   } catch (error) {
     console.log(error);
   }
