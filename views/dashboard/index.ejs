@@ -38,3 +38,19 @@
           <% } %>
   </div>
 </div>
+
+<div class="pagination">
+  <% if (current> 1) { %>
+    <a href="/dashboard/<%= current - 1 %>">Previous</a>
+    <% } %>
+
+      <% for (let i=1; i <=pages; i++) { %>
+        <a href="/dashboard/<%= i %>" class="<%= current == i ? 'active' : '' %>">
+          <%= i %>
+        </a>
+        <% } %>
+
+          <% if (current < pages) { %>
+            <a href="/dashboard/<%= current + 1 %>">Next</a>
+            <% } %>
+</div>

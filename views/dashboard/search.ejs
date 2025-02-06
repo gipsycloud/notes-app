@@ -4,14 +4,14 @@
       <% search.forEach((note, index)=> { %>
         <a href="/dashboard/item/<%= note._id %>">
           <h4>
-            <%= note.title %>
+            <%- note.title %>
           </h4>
           <%- note.content %>
         </a>
+        <small><%- note.createdAt %></small>
         <% }) %>
           <% } else { %>
             <p>Not items found !!</p>
             <% } %>
   </div>
-
 </div>

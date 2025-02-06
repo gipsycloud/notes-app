@@ -1,5 +1,6 @@
 const Note = require('../model/Note');
 const mongoose = require('mongoose');
+
 // get || dashboard page
 exports.dashboard = async (req, res) => {
   // console.log(req.user);
@@ -14,7 +15,7 @@ exports.dashboard = async (req, res) => {
   //   }
   // }
   // insertDummyData();
-  let perPage = 5;
+  let perPage = 8;
   let page = req.params.page || 1;
 
   const locals = {
@@ -22,26 +23,28 @@ exports.dashboard = async (req, res) => {
     dscription: "Node application"
   };
   try {
-    // const notes = await Note.find({ user: req.user._id })
     const notes = await Note.aggregate([
-      // { $sort: { createdAt: -1 } },
+      { $sort: { createdAt: -1 } },
       { $match: { user: req.user._id } },
       {
         $project: {
-          title: { $substr: ["$title", 0, 30] },
-          content: { $substr: ["$content", 0, 100] },
-        },
+          title: { $substrCP: ["$title", 0, 30] },     //  This operator is used instead of $substr to handle UTF-8 characters correctly.
+          content: { $substrCP: ["$content", 0, 100] },
+          createdAt: 1
+        }
       }
     ])
-      // .skip(perPage * page - perPage)
-      // .limit(perPage)
+      .skip(perPage * page - perPage)
+      .limit(perPage)
       .exec();
-    // const count = await Note.countDocuments();    
+    const count = await Note.countDocuments({ user: req.user._id });
     res.render('dashboard/index', {
       userName: req.user.displayName,
       locals,
       notes,
       layout: "../views/layouts/dashboard",
+      current: page,
+      pages: Math.ceil(count / perPage)
     });
 
     // Mongoose "^7.0.0 Update
@@ -177,7 +180,7 @@ exports.searchSubmit = async (req, res) => {
       searchResults.forEach((result) => {
         result.title = result.title.replace(new RegExp(searchTerm, 'gi'), (match) => `<span class="highlight">${match}</span>`);
         result.content = result.content.replace(new RegExp(searchTerm, 'gi'), (match) => `<span class="highlight">${match}</span>`);
-        console.log(result.content);
+        // console.log(result.content);
       });
       return searchResults;
     }
