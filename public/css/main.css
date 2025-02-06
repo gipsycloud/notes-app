@@ -98,4 +98,26 @@ h6 {
   position: absolute;
   right: -50px;
   bottom: -30px;
+<<<<<<< Updated upstream
+=======
+}
+
+.highlight {
+  background-color: red;
+  color: white;
+  /* font-weight: bold; */
+}
+
+.dashboard a {
+  text-decoration: none;
+}
+
+.pagination a {
+  margin: 0 5px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  font-weight: bold;
+>>>>>>> Stashed changes
 }
