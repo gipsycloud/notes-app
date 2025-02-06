@@ -99,3 +99,13 @@ h6 {
   right: -50px;
   bottom: -30px;
 }
+
+.highlight {
+  background-color: red;
+  color: white;
+  /* font-weight: bold; */
+}
+
+.dashboard a {
+  text-decoration: none;
+}

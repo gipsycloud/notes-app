@@ -162,23 +162,36 @@ exports.search = async (req, res) => {
 // search || post
 exports.searchSubmit = async (req, res) => {
   try {
-    let searchTerm = req.body.searchTerm;
+    let searchTerm = req.body.searchTerm.trim();
+    console.log(searchTerm);
+
     const searchSpecialChars = searchTerm.replace(/[^a-zA-Z0-9]/g, '');
     const searchResults = await Note.find({
       $or: [
-        // { $search: searchSpecialChars },
-        // { $caseSensitive: false },
         { title: { $regex: new RegExp(searchSpecialChars, 'i') } },
         { content: { $regex: new RegExp(searchSpecialChars, 'i') } },
       ]
     }).where({ user: req.user.id }).lean();
+
+    const highlightcontent = (searchResults, searchTerm) => {
+      searchResults.forEach((result) => {
+        result.title = result.title.replace(new RegExp(searchTerm, 'gi'), (match) => `<span class="highlight">${match}</span>`);
+        result.content = result.content.replace(new RegExp(searchTerm, 'gi'), (match) => `<span class="highlight">${match}</span>`);
+        console.log(result.content);
+      });
+      return searchResults;
+    }
+
     res.render('dashboard/search', {
       layout: "../views/layouts/dashboard",
-      search: searchResults,
+      search: highlightcontent(searchResults, searchTerm),
       searchTerm
     });
   } catch (error) {
     console.log(error);
 
   }
+};
+const getClassNames = (controllerName) => {
+  return `${controllerName}-controller`;
 };
