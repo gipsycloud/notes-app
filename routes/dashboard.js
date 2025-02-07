@@ -4,6 +4,7 @@ const { isLoggedIn } = require('../middleware/checkAuth');
 const dashboardController = require('../controllers/dashboardController');
 
 router.get('/dashboard', isLoggedIn, dashboardController.dashboard);
+// router.get('/dashboard/:page?', isLoggedIn, dashboardController.dashboard);
 router.get('/dashboard/item/:id', isLoggedIn, dashboardController.item);
 
 router.get('/dashboard/add_note', isLoggedIn, dashboardController.addItem);
@@ -16,3 +17,4 @@ router.get('/dashboard/search', isLoggedIn, dashboardController.search);
 router.post('/dashboard/search', isLoggedIn, dashboardController.searchSubmit);
 
 module.exports = router;
+

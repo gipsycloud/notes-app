@@ -79,7 +79,7 @@ exports.dashboard = async (req, res) => {
 exports.item = async (req, res) => {
   const locals = {
     title: "Dashboard",
-    dscription: "Note application"
+    dscription: "Note applicaif /search link write in url, failed to look up view error showing in node jstion"
   };
   const note = await Note.findById({ _id: req.params.id }).where({ _id: req.params.id }).lean();
   if (note) {
@@ -149,12 +149,16 @@ exports.deleteItem = async (req, res) => {
 // search || get
 exports.search = async (req, res) => {
   try {
-    res.render('/dashboard/search', {
+    const searchQuery = req.query.search || '';
+    let searchTerm = req.query.searchTerm || '';
+    res.render('dashboard/search', {
       layout: "../views/layouts/dashboard",
-      search: req.query.search
+      search: searchQuery,
+      searchTerm: searchTerm
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error during search GET request:", error);
+    res.status(500).send("Internal Server Error");
 
   }
 };

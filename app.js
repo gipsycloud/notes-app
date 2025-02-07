@@ -6,7 +6,7 @@ const session = require('express-session');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
 const methodOverride = require('method-override');
-
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -38,6 +38,10 @@ app.use(methodOverride("_method"));
 //  static files;
 app.use(express.static('public'));
 
+// Set 'views' directory for any views  
+// being rendered res.render() 
+app.set('views', path.join(__dirname, 'views'));
+
 // template engine
 app.use(expressLayouts);
 app.set('layout', './layouts/main');
@@ -56,5 +60,6 @@ app.get('*', (req, res) => {
 var ProgressBar = require('./config/progressbar');
 
 app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+  // console.log(`Server is running on port ${port}`);
+  console.log(`Server is running on port ${port}` + ' in ' + app.get('env') + ' mode')
 });
