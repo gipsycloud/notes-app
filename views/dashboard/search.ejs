@@ -11,7 +11,10 @@
         <small><%- note.createdAt %></small>
         <% }) %>
           <% } else { %>
-            <p>Not items found !!</p>
+            <p>Not items found !! for <span class="highlight">
+                <%= searchTerm + '__' %>
+              </span>
+            </p>
             <% } %>
   </div>
 </div>
