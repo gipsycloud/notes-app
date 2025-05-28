@@ -36,7 +36,8 @@ app.use(express.json());
 app.use(methodOverride("_method"));
 
 //  static files;
-app.use(express.static('public'));
+// app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Set 'views' directory for any views  
 // being rendered res.render() 
